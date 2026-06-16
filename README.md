@@ -1,6 +1,8 @@
 # **E-BankSim v2.0**
 
-**E-BankSim** is a C++ console application that simulates a complete electronic banking system. The project evolved from a simple procedural banking application into a fully Object-Oriented Programming (OOP) system featuring authentication, permissions, transactions, transfer logs, currency exchange, and modular screen-based architecture.
+**E-BankSim** is a complete console-based banking management system developed in **C++**. The project simulates real-world banking operations such as client management, user authentication, transactions, transfers, permission control, login tracking, and currency exchange.
+
+The application was originally developed using a procedural programming approach and later completely refactored into a full **Object-Oriented Programming (OOP)** architecture to improve maintainability, scalability, and code organization.
 
 ---
 
@@ -13,8 +15,10 @@
 5. How It Works
 6. Project Structure
 7. System Architecture
-8. Learning Goals
-9. Changes from Previous Version
+8. System Diagrams
+9. Learning Goals
+10. Changes from Previous Version
+11. Author
 
 ---
 
@@ -64,8 +68,8 @@
 ## **Currency Exchange**
 
 * List all currencies
-* Find currency by code
-* Find currency by country
+* Find currencies by code
+* Find currencies by country
 * Update exchange rates
 * Currency conversion calculator
 
@@ -83,7 +87,7 @@
 
 # **Login Information**
 
-### Default Admin Account
+### Default Administrator Account
 
 | Username | Password |
 | -------- | -------- |
@@ -186,7 +190,7 @@ Stores currency exchange rates.
 
 ---
 
-> All records are stored using the custom delimiter:
+All records are stored using the custom delimiter:
 
 ```cpp
 #//#
@@ -198,10 +202,10 @@ Stores currency exchange rates.
 
 1. The application loads data from text files into memory.
 2. Users authenticate through the login system.
-3. Permissions are verified before opening protected screens.
-4. Users perform operations through structured menus.
-5. Changes are saved immediately back to the text files.
-6. Login operations and transfers are logged automatically.
+3. Permissions are validated before opening protected screens.
+4. Operations are executed through a structured menu system.
+5. Changes are saved immediately back to text files.
+6. Login activities and transfers are logged automatically.
 
 ---
 
@@ -276,7 +280,6 @@ E-BankSim.cpp
 │   ├── DateLib.h
 │   ├── InputValidation.h
 │   ├── UtilLib.h
-│   └── EncryptionLib.h
 │
 ├── Data Files
 │   ├── Clients.txt
@@ -306,6 +309,130 @@ Login System
 
 ---
 
+# **System Diagrams**
+
+### **Complete System Architecture**
+
+```mermaid
+flowchart TD
+    Login["Login System"] --> Main["Main Menu"]
+
+    Main --> Clients["Client Management"]
+    Main --> Transactions["Transactions"]
+    Main --> Users["User Management"]
+    Main --> Register["Login Register"]
+    Main --> Currency["Currency Exchange"]
+
+    Clients --> AddClient["Add Client"]
+    Clients --> UpdateClient["Update Client"]
+    Clients --> DeleteClient["Delete Client"]
+    Clients --> FindClient["Find Client"]
+
+    Transactions --> Deposit["Deposit"]
+    Transactions --> Withdraw["Withdraw"]
+    Transactions --> Transfer["Transfer"]
+    Transactions --> TransferLog["Transfer Log"]
+    Transactions --> TotalBalances["Total Balances"]
+
+    Users --> AddUser["Add User"]
+    Users --> UpdateUser["Update User"]
+    Users --> DeleteUser["Delete User"]
+    Users --> FindUser["Find User"]
+
+    Currency --> CurrencyList["List Currencies"]
+    Currency --> CurrencyFind["Find Currency"]
+    Currency --> CurrencyUpdate["Update Rate"]
+    Currency --> CurrencyCalculator["Calculator"]
+```
+
+### **UML Class Diagram**
+
+```mermaid
+classDiagram
+
+    class clsInterfaceCommunication
+
+    class clsPerson{
+        +FirstName
+        +LastName
+        +Email
+        +Phone
+        +FullName()
+    }
+
+    class clsUser{
+        +UserName
+        +Password
+        +Permissions
+        +Find()
+        +Save()
+        +Delete()
+        +CheckAccessPermission()
+    }
+
+    class clsBankClient{
+        +AccountNumber
+        +PinCode
+        +AccountBalance
+        +Find()
+        +Save()
+        +Delete()
+        +Deposit()
+        +Withdraw()
+        +Transfer()
+    }
+
+    class clsCurrency{
+        +CurrencyCode
+        +CurrencyName
+        +Country
+        +Rate
+        +FindByCode()
+        +FindByCountry()
+        +UpdateRate()
+    }
+
+    clsInterfaceCommunication <|.. clsPerson
+    clsPerson <|-- clsUser
+    clsPerson <|-- clsBankClient
+```
+
+### **Navigation Flow**
+
+```mermaid
+flowchart TD
+
+    Start((Start))
+    Start --> Login["Login Screen"]
+
+    Login --> Check{"Valid User?"}
+
+    Check -- No --> Login
+    Check -- Yes --> MainMenu["Main Menu"]
+
+    MainMenu --> Clients
+    MainMenu --> Transactions
+    MainMenu --> Users
+    MainMenu --> Currency
+    MainMenu --> Logout
+
+    Logout --> End((End))
+```
+
+### **File Storage Diagram**
+
+```mermaid
+flowchart LR
+
+    clsBankClient --> ClientsTxt[(Clients.txt)]
+    clsUser --> UsersTxt[(Users.txt)]
+    clsUser --> LoginTxt[(LoginRegister.txt)]
+    clsBankClient --> TransferTxt[(TransferLog.txt)]
+    clsCurrency --> CurrencyTxt[(Currencies.txt)]
+```
+
+---
+
 # **Learning Goals**
 
 This project was created to practice and improve:
@@ -326,24 +453,35 @@ This project was created to practice and improve:
 
 # **Changes from Previous Version**
 
-| Feature                   | Previous Version       | v2.0                              |
+| Feature                   | v0.1                   | v2.0                              |
 | ------------------------- | ---------------------- | --------------------------------- |
 | Programming Style         | Procedural Programming | Object-Oriented Programming (OOP) |
-| Client CRUD               | ✅                      | ✅                                 |
-| User Management           | ❌                      | ✅                                 |
-| Authentication System     | ❌                      | ✅                                 |
-| Permissions System        | ❌                      | ✅                                 |
-| Login Register            | ❌                      | ✅                                 |
-| Transfers                 | ❌                      | ✅                                 |
-| Transfer Logs             | ❌                      | ✅                                 |
-| Currency Exchange         | ❌                      | ✅                                 |
-| Currency Calculator       | ❌                      | ✅                                 |
-| Password Encryption       | ❌                      | ✅                                 |
-| Inheritance               | ❌                      | ✅                                 |
-| Interfaces                | ❌                      | ✅                                 |
-| Encapsulation             | ❌                      | ✅                                 |
-| Multi-Screen Architecture | ❌                      | ✅                                 |
+| Client CRUD               | Available              | Refactored using Classes          |
+| User Management           | Available              | Improved & Refactored             |
+| Permissions System        | Available              | Improved                          |
+| Authentication System     | Basic Login            | Enhanced Authentication           |
+| Transfers                 | Available              | Improved & Refactored             |
+| Transfer Logs             | Available              | Improved Logging Structure        |
+| Currency Exchange         | Not Available          | Added                             |
+| Currency Calculator       | Not Available          | Added                             |
+| Password Encryption       | Not Available          | Added                             |
+| Inheritance               | Not Available          | Added                             |
+| Interfaces                | Not Available          | Added                             |
+| Encapsulation             | Not Available          | Added                             |
+| Multi-Screen Architecture | Limited                | Fully Modular                     |
+| Code Organization         | Procedural             | OOP Architecture                  |
 | Documentation             | Basic                  | Professional                      |
+
+### **Major Improvements in v2.0**
+
+* Refactored the entire project from Procedural Programming to Object-Oriented Programming (OOP).
+* Introduced core classes such as `clsPerson`, `clsUser`, `clsBankClient`, and `clsCurrency`.
+* Added inheritance, encapsulation, and interface-based design.
+* Added Currency Exchange and Currency Calculator modules.
+* Added password encryption for user credentials.
+* Improved authentication and permission handling.
+* Reorganized the project into modular screen classes.
+* Improved maintainability, scalability, and code readability.
 
 ---
 
