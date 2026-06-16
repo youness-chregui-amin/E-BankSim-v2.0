@@ -311,127 +311,484 @@ Login System
 
 # **System Diagrams**
 
-### **Complete System Architecture**
+## 1. Complete System Architecture
 
 ```mermaid
 flowchart TD
-    Login["Login System"] --> Main["Main Menu"]
+    App["E-BankSim.cpp<br/>main()"] --> Login["clsLoginScreen<br/>Login Screen"]
 
-    Main --> Clients["Client Management"]
-    Main --> Transactions["Transactions"]
-    Main --> Users["User Management"]
-    Main --> Register["Login Register"]
-    Main --> Currency["Currency Exchange"]
+    Login --> Auth{"Valid username<br/>and password?"}
+    Auth -- "No<br/>3 failed tries" --> Exit["Exit Application"]
+    Auth -- "Yes" --> CurrentUser["CurrentUser<br/>Global Object"]
 
-    Clients --> AddClient["Add Client"]
-    Clients --> UpdateClient["Update Client"]
-    Clients --> DeleteClient["Delete Client"]
-    Clients --> FindClient["Find Client"]
+    CurrentUser --> Main["clsMainScreen<br/>Main Menu"]
 
-    Transactions --> Deposit["Deposit"]
-    Transactions --> Withdraw["Withdraw"]
-    Transactions --> Transfer["Transfer"]
-    Transactions --> TransferLog["Transfer Log"]
-    Transactions --> TotalBalances["Total Balances"]
+    Main --> ClientModule["Client Management"]
+    Main --> TransactionModule["Transactions"]
+    Main --> UserModule["Manage Users"]
+    Main --> LoginRegisterModule["Login Register"]
+    Main --> CurrencyModule["Currency Exchange"]
+    Main --> Logout["Logout"]
 
-    Users --> AddUser["Add User"]
-    Users --> UpdateUser["Update User"]
-    Users --> DeleteUser["Delete User"]
-    Users --> FindUser["Find User"]
+    ClientModule --> ClientList["clsClientListScreen<br/>List Clients"]
+    ClientModule --> AddClient["clsAddNewClientScreen<br/>Add Client"]
+    ClientModule --> DeleteClient["clsDeleteClientScreen<br/>Delete Client"]
+    ClientModule --> UpdateClient["clsUpdateClientScreen<br/>Update Client"]
+    ClientModule --> FindClient["clsFindClientScreen<br/>Find Client"]
 
-    Currency --> CurrencyList["List Currencies"]
-    Currency --> CurrencyFind["Find Currency"]
-    Currency --> CurrencyUpdate["Update Rate"]
-    Currency --> CurrencyCalculator["Calculator"]
+    TransactionModule --> Deposit["clsDepositScreen<br/>Deposit"]
+    TransactionModule --> Withdraw["clsWithdrawScreen<br/>Withdraw"]
+    TransactionModule --> TotalBalance["clsTotalBalanceScreen<br/>Total Balances"]
+    TransactionModule --> Transfer["clsTransferScreen<br/>Transfer Money"]
+    TransactionModule --> TransferLog["clsTransferLogScreen<br/>Transfer Log"]
+
+    UserModule --> UsersList["clsUsersListScreen<br/>List Users"]
+    UserModule --> AddUser["clsAddNewUserScreen<br/>Add User"]
+    UserModule --> DeleteUser["clsDeleteUserScreen<br/>Delete User"]
+    UserModule --> UpdateUser["clsUpdateUserScreen<br/>Update User"]
+    UserModule --> FindUser["clsFindUserScreen<br/>Find User"]
+
+    LoginRegisterModule --> RegisterScreen["clsRegisterLoginScreen<br/>Show Login History"]
+
+    CurrencyModule --> CurrencyList["clsCurrenciesListScreen<br/>List Currencies"]
+    CurrencyModule --> FindCurrency["clsFindCurrencyScreen<br/>Find Currency"]
+    CurrencyModule --> UpdateCurrency["clsUpdateCurrencyRateScreen<br/>Update Rate"]
+    CurrencyModule --> CurrencyCalculator["clsCurrencyCalculatorScreen<br/>Currency Calculator"]
+
+    ClientList --> BankClient["clsBankClient"]
+    AddClient --> BankClient
+    DeleteClient --> BankClient
+    UpdateClient --> BankClient
+    FindClient --> BankClient
+    Deposit --> BankClient
+    Withdraw --> BankClient
+    TotalBalance --> BankClient
+    Transfer --> BankClient
+    TransferLog --> BankClient
+
+    Login --> User["clsUser"]
+    UsersList --> User
+    AddUser --> User
+    DeleteUser --> User
+    UpdateUser --> User
+    FindUser --> User
+    RegisterScreen --> User
+
+    CurrencyList --> Currency["clsCurrency"]
+    FindCurrency --> Currency
+    UpdateCurrency --> Currency
+    CurrencyCalculator --> Currency
+
+    BankClient --> ClientsFile[("Clients.txt")]
+    BankClient --> TransferFile[("TransferLog.txt")]
+    User --> UsersFile[("Users.txt")]
+    User --> LoginFile[("LoginRegister.txt")]
+    Currency --> CurrencyFile[("Currencies.txt")]
+
+    Screen["clsScreen<br/>Base Screen Class"] --> Login
+    Screen --> Main
+    Screen --> ClientModule
+    Screen --> TransactionModule
+    Screen --> UserModule
+    Screen --> CurrencyModule
+
+    Person["clsPerson<br/>Base Person Class"] --> BankClient
+    Person --> User
+
+    Interface["clsInterfaceCommunication<br/>Interface"] --> Person
+
+    Input["clsInputValidate"] --> Login
+    Input --> Main
+    Input --> ClientModule
+    Input --> TransactionModule
+    Input --> UserModule
+    Input --> CurrencyModule
+
+    Date["clsDate"] --> Screen
+    Date --> User
+    Util["clsUtil"] --> User
+    Util --> TotalBalance
+    String["clsString"] --> User
+    String --> BankClient
+    String --> Currency
 ```
 
-### **UML Class Diagram**
+## 2. UML Class Diagram
 
 ```mermaid
 classDiagram
 
-    class clsInterfaceCommunication
-
-    class clsPerson{
-        +FirstName
-        +LastName
-        +Email
-        +Phone
-        +FullName()
+    class clsInterfaceCommunication {
+        <<interface>>
+        +SendEmail(string Title, string Body)
+        +SendFax(string Title, string Body)
+        +SendSMS(string Title, string Body)
     }
 
-    class clsUser{
-        +UserName
-        +Password
-        +Permissions
-        +Find()
-        +Save()
-        +Delete()
-        +CheckAccessPermission()
+    class clsPerson {
+        -string FirstName
+        -string LastName
+        -string Email
+        -string Phone
+        +FullName() string
+        +SendEmail(string Title, string Body)
+        +SendFax(string Title, string Body)
+        +SendSMS(string Title, string Body)
     }
 
-    class clsBankClient{
-        +AccountNumber
-        +PinCode
-        +AccountBalance
-        +Find()
-        +Save()
-        +Delete()
-        +Deposit()
-        +Withdraw()
-        +Transfer()
+    class clsBankClient {
+        -string AccountNumber
+        -string PinCode
+        -float AccountBalance
+        -bool MarkedForDelete
+        +Find(string AccountNumber) clsBankClient
+        +Find(string AccountNumber, string PinCode) clsBankClient
+        +IsClientExist(string AccountNumber) bool
+        +GetAddNewClientObject(string AccountNumber) clsBankClient
+        +Save() enSaveResults
+        +Delete() bool
+        +Deposit(double Amount)
+        +Withdraw(double Amount) bool
+        +Transfer(float Amount, clsBankClient DestinationClient, string UserName) bool
+        +GetClientsList() vector~clsBankClient~
+        +GetTotalBalances() double
+        +GetTransfersLogList() vector~stTransferLogRecord~
     }
 
-    class clsCurrency{
-        +CurrencyCode
-        +CurrencyName
-        +Country
-        +Rate
-        +FindByCode()
-        +FindByCountry()
-        +UpdateRate()
+    class clsUser {
+        -string UserName
+        -string Password
+        -int Permissions
+        -bool MarkedForDelete
+        +Find(string UserName) clsUser
+        +Find(string UserName, string Password) clsUser
+        +IsUserExist(string UserName) bool
+        +GetAddNewUserObject(string UserName) clsUser
+        +Save() enSaveResult
+        +Delete() bool
+        +CheckAccessPermission(enPermission Permission) bool
+        +RegisterLogIn()
+        +GetUsersList() vector~clsUser~
+        +GetLoginRegisterList() vector~stLoginRegisterRecord~
+    }
+
+    class clsCurrency {
+        -string Country
+        -string CurrencyCode
+        -string CurrencyName
+        -float Rate
+        +FindByCode(string CurrencyCode) clsCurrency
+        +FindByCountry(string Country) clsCurrency
+        +IsCurrencyExist(string CurrencyCode) bool
+        +UpdateRate(float NewRate)
+        +ConvertToUSD(float Amount) float
+        +ConvertToOtherCurrency(float Amount, clsCurrency Currency2) float
+        +GetCurrenciesList() vector~clsCurrency~
+    }
+
+    class clsScreen {
+        +_DrawScreenHeader(string Title, string SubTitle)
+        +CheckAccessRights(clsUser::enPermission Permission) bool
+        +_DrawScreenHeaderMain()
+        +IsNowUser()
+        +PrintCurrentDateTime()
+    }
+
+    class clsDate {
+        -short Day
+        -short Month
+        -short Year
+        +GetSystemDate() clsDate
+        +GetSystemDateTimeString() string
+        +DateToString() string
+        +IsValidDate(clsDate Date) bool
+    }
+
+    class clsString {
+        -string Value
+        +Split(string Text, string Delim) vector~string~
+        +UpperAllString(string Text) string
+        +LowerAllString(string Text) string
+        +Trim(string Text) string
+    }
+
+    class clsInputValidate {
+        +ReadString() string
+        +ReadShortNumber() short
+        +ReadIntNumber() int
+        +ReadDblNumber() double
+        +ReadFloatNumber() double
+        +ReadShortNumberBetween(short From, short To) short
+        +ReadIntNumberBetween(int From, int To) int
+    }
+
+    class clsUtil {
+        +RandomNumber(int From, int To) int
+        +GenerateKey() string
+        +NumberToText(int Number) string
+        +EncryptText(string Text) string
+        +DecryptText(string Text) string
     }
 
     clsInterfaceCommunication <|.. clsPerson
-    clsPerson <|-- clsUser
     clsPerson <|-- clsBankClient
+    clsPerson <|-- clsUser
+
+    clsBankClient ..> clsString
+    clsBankClient ..> clsDate
+    clsUser ..> clsString
+    clsUser ..> clsDate
+    clsUser ..> clsUtil
+    clsCurrency ..> clsString
+    clsScreen ..> clsUser
+    clsScreen ..> clsDate
 ```
 
-### **Navigation Flow**
+## 3. Screens Inheritance Diagram
+
+```mermaid
+classDiagram
+    class clsScreen {
+        +_DrawScreenHeader()
+        +CheckAccessRights()
+    }
+
+    class clsLoginScreen
+    class clsMainScreen
+    class clsClientListScreen
+    class clsAddNewClientScreen
+    class clsDeleteClientScreen
+    class clsUpdateClientScreen
+    class clsFindClientScreen
+    class clsTransactionsScreen
+    class clsDepositScreen
+    class clsWithdrawScreen
+    class clsTotalBalanceScreen
+    class clsTransferScreen
+    class clsTransferLogScreen
+    class clsManageUsers
+    class clsUsersListScreen
+    class clsAddNewUserScreen
+    class clsDeleteUserScreen
+    class clsUpdateUserScreen
+    class clsFindUserScreen
+    class clsRegisterLoginScreen
+    class clsCurrencyMainScreen
+    class clsCurrenciesListScreen
+    class clsFindCurrencyScreen
+    class clsUpdateCurrencyRateScreen
+    class clsCurrencyCalculatorScreen
+
+    clsScreen <|-- clsLoginScreen
+    clsScreen <|-- clsMainScreen
+    clsScreen <|-- clsClientListScreen
+    clsScreen <|-- clsAddNewClientScreen
+    clsScreen <|-- clsDeleteClientScreen
+    clsScreen <|-- clsUpdateClientScreen
+    clsScreen <|-- clsFindClientScreen
+    clsScreen <|-- clsTransactionsScreen
+    clsScreen <|-- clsDepositScreen
+    clsScreen <|-- clsWithdrawScreen
+    clsScreen <|-- clsTotalBalanceScreen
+    clsScreen <|-- clsTransferScreen
+    clsScreen <|-- clsTransferLogScreen
+    clsScreen <|-- clsManageUsers
+    clsScreen <|-- clsUsersListScreen
+    clsScreen <|-- clsAddNewUserScreen
+    clsScreen <|-- clsDeleteUserScreen
+    clsScreen <|-- clsUpdateUserScreen
+    clsScreen <|-- clsFindUserScreen
+    clsScreen <|-- clsRegisterLoginScreen
+    clsScreen <|-- clsCurrencyMainScreen
+    clsScreen <|-- clsCurrenciesListScreen
+    clsScreen <|-- clsFindCurrencyScreen
+    clsScreen <|-- clsUpdateCurrencyRateScreen
+    clsScreen <|-- clsCurrencyCalculatorScreen
+```
+
+## 4. Navigation Flow
 
 ```mermaid
 flowchart TD
+    Start((Start)) --> MainCPP["main()"]
+    MainCPP --> LoginScreen["Login Screen"]
 
-    Start((Start))
-    Start --> Login["Login Screen"]
+    LoginScreen --> LoginCheck{"User exists<br/>and password correct?"}
 
-    Login --> Check{"Valid User?"}
+    LoginCheck -- "No" --> FailedCount{"Failed count = 3?"}
+    FailedCount -- "No" --> LoginScreen
+    FailedCount -- "Yes" --> End((End))
 
-    Check -- No --> Login
-    Check -- Yes --> MainMenu["Main Menu"]
+    LoginCheck -- "Yes" --> RegisterLogin["Register Login<br/>in LoginRegister.txt"]
+    RegisterLogin --> MainMenu["Main Menu"]
 
-    MainMenu --> Clients
-    MainMenu --> Transactions
-    MainMenu --> Users
-    MainMenu --> Currency
-    MainMenu --> Logout
+    MainMenu --> Option{"Choose option"}
 
-    Logout --> End((End))
+    Option --> O1["1. Show Client List"]
+    Option --> O2["2. Add New Client"]
+    Option --> O3["3. Delete Client"]
+    Option --> O4["4. Update Client"]
+    Option --> O5["5. Find Client"]
+    Option --> O6["6. Transactions"]
+    Option --> O7["7. Manage Users"]
+    Option --> O8["8. Login Register"]
+    Option --> O9["9. Currency Exchange"]
+    Option --> O10["10. Logout"]
+
+    O1 --> Back["Back to Main Menu"]
+    O2 --> Back
+    O3 --> Back
+    O4 --> Back
+    O5 --> Back
+    O8 --> Back
+    O9 --> Back
+    Back --> MainMenu
+
+    O6 --> TransactionsMenu["Transactions Menu"]
+    TransactionsMenu --> T1["Deposit"]
+    TransactionsMenu --> T2["Withdraw"]
+    TransactionsMenu --> T3["Total Balances"]
+    TransactionsMenu --> T4["Transfer"]
+    TransactionsMenu --> T5["Transfer Log"]
+    TransactionsMenu --> T6["Main Menu"]
+
+    T1 --> TransactionsMenu
+    T2 --> TransactionsMenu
+    T3 --> TransactionsMenu
+    T4 --> TransactionsMenu
+    T5 --> TransactionsMenu
+    T6 --> MainMenu
+
+    O7 --> UsersMenu["Manage Users Menu"]
+    UsersMenu --> U1["List Users"]
+    UsersMenu --> U2["Add User"]
+    UsersMenu --> U3["Delete User"]
+    UsersMenu --> U4["Update User"]
+    UsersMenu --> U5["Find User"]
+    UsersMenu --> U6["Main Menu"]
+
+    U1 --> UsersMenu
+    U2 --> UsersMenu
+    U3 --> UsersMenu
+    U4 --> UsersMenu
+    U5 --> UsersMenu
+    U6 --> MainMenu
+
+    O10 --> Logout["Clear CurrentUser"]
+    Logout --> LoginScreen
 ```
 
-### **File Storage Diagram**
+## 5. File Storage Diagram
 
 ```mermaid
 flowchart LR
+    subgraph BusinessClasses["Business Classes"]
+        BankClient["clsBankClient"]
+        User["clsUser"]
+        Currency["clsCurrency"]
+    end
 
-    clsBankClient --> ClientsTxt[(Clients.txt)]
-    clsUser --> UsersTxt[(Users.txt)]
-    clsUser --> LoginTxt[(LoginRegister.txt)]
-    clsBankClient --> TransferTxt[(TransferLog.txt)]
-    clsCurrency --> CurrencyTxt[(Currencies.txt)]
+    subgraph TextFiles["Text Files Storage"]
+        ClientsTxt[("Clients.txt<br/>Client records")]
+        UsersTxt[("Users.txt<br/>User accounts")]
+        LoginTxt[("LoginRegister.txt<br/>Login history")]
+        TransferTxt[("TransferLog.txt<br/>Transfer operations")]
+        CurrenciesTxt[("Currencies.txt<br/>Currency rates")]
+    end
+
+    BankClient -->|"Load / Save / Update / Delete"| ClientsTxt
+    BankClient -->|"Register transfers"| TransferTxt
+
+    User -->|"Load / Save / Update / Delete"| UsersTxt
+    User -->|"Register login"| LoginTxt
+
+    Currency -->|"Load / Update rates"| CurrenciesTxt
 ```
 
----
+## 6. Permissions System
+
+```mermaid
+flowchart TD
+    User["clsUser"] --> Permissions["Permissions Integer"]
+
+    Permissions --> All["eAll = -1<br/>Full Access"]
+    Permissions --> List["pListClients = 1"]
+    Permissions --> Add["pAddNewClient = 2"]
+    Permissions --> Delete["pDeleteClient = 4"]
+    Permissions --> Update["pUpdateClients = 8"]
+    Permissions --> Find["pFindClient = 16"]
+    Permissions --> Transactions["pTransactions = 32"]
+    Permissions --> LoginRegister["pLoginRegister = 64"]
+    Permissions --> ManageUsers["pManageUsers = 128"]
+    Permissions --> Currency["eCurrencyExchange = 256"]
+
+    Screen["clsScreen::CheckAccessRights()"] --> Check{"Has permission?"}
+    Check -- "Yes" --> Open["Open Screen"]
+    Check -- "No" --> Denied["Access Denied"]
+```
+
+## 7. Transactions Module
+
+```mermaid
+flowchart TD
+    Transactions["clsTransactionsScreen"] --> Deposit["clsDepositScreen"]
+    Transactions --> Withdraw["clsWithdrawScreen"]
+    Transactions --> Total["clsTotalBalanceScreen"]
+    Transactions --> Transfer["clsTransferScreen"]
+    Transactions --> Log["clsTransferLogScreen"]
+
+    Deposit --> FindClient1["Find client by account number"]
+    FindClient1 --> AddAmount["Add amount to balance"]
+    AddAmount --> SaveClient1["Save to Clients.txt"]
+
+    Withdraw --> FindClient2["Find client by account number"]
+    FindClient2 --> CheckBalance{"Enough balance?"}
+    CheckBalance -- "Yes" --> SubAmount["Subtract amount"]
+    SubAmount --> SaveClient2["Save to Clients.txt"]
+    CheckBalance -- "No" --> Error["Insufficient balance"]
+
+    Total --> LoadClients["Load all clients"]
+    LoadClients --> SumBalances["Calculate total balances"]
+
+    Transfer --> Source["Find source client"]
+    Transfer --> Destination["Find destination client"]
+    Source --> AmountCheck{"Amount <= source balance?"}
+    AmountCheck -- "Yes" --> DoTransfer["Withdraw from source<br/>Deposit to destination"]
+    DoTransfer --> SaveBoth["Save both clients"]
+    SaveBoth --> RegisterTransfer["Write transfer log"]
+
+    Log --> ReadLog["Read TransferLog.txt"]
+```
+
+## 8. Currency Exchange Module
+
+```mermaid
+flowchart TD
+    CurrencyMain["clsCurrencyMainScreen"] --> List["clsCurrenciesListScreen"]
+    CurrencyMain --> Find["clsFindCurrencyScreen"]
+    CurrencyMain --> Update["clsUpdateCurrencyRateScreen"]
+    CurrencyMain --> Calculator["clsCurrencyCalculatorScreen"]
+
+    List --> LoadCurrencies["Load all currencies<br/>from Currencies.txt"]
+
+    Find --> FindChoice{"Find by"}
+    FindChoice --> Code["Currency Code"]
+    FindChoice --> Country["Country Name"]
+    Code --> FindByCode["clsCurrency::FindByCode()"]
+    Country --> FindByCountry["clsCurrency::FindByCountry()"]
+
+    Update --> ReadCode["Read currency code"]
+    ReadCode --> CheckExist{"Currency exists?"}
+    CheckExist -- "Yes" --> NewRate["Read new rate"]
+    NewRate --> SaveRate["Update Currencies.txt"]
+    CheckExist -- "No" --> TryAgain["Ask again"]
+
+    Calculator --> From["Currency From"]
+    Calculator --> To["Currency To"]
+    From --> Amount["Read amount"]
+    Amount --> USD["Convert to USD"]
+    USD --> Other["Convert USD to target currency"]
+```
 
 # **Learning Goals**
 
