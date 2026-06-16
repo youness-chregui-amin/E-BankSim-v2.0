@@ -1,117 +1,240 @@
-# **E-BankSim v0.1**
+# **E-BankSim v2.0**
 
-**E-BankSim** is a C++ console application that simulates a simple electronic banking system. It manages client information, handles transactions, and now includes **user authentication and permissions management**, bringing it closer to a real-world banking simulation.
-
----
-
-## **Table of Contents**
-
-1. [Features](#features)
-2. [Login Information](#login-information)
-3. [Database Structure](#database-structure)
-4. [How It Works](#how-it-works)
-5. [Project Structure](#project-structure)
-6. [Learning Goals](#learning-goals)
-7. [Changes from Previous Version](#changes-from-previous-version)
+**E-BankSim** is a C++ console application that simulates a complete electronic banking system. The project evolved from a simple procedural banking application into a fully Object-Oriented Programming (OOP) system featuring authentication, permissions, transactions, transfer logs, currency exchange, and modular screen-based architecture.
 
 ---
 
-## **Features**
+# **Table of Contents**
 
-### **Client Management (CRUD)**
+1. Features
+2. Login Information
+3. Permission System
+4. Database Structure
+5. How It Works
+6. Project Structure
+7. System Architecture
+8. Learning Goals
+9. Changes from Previous Version
+
+---
+
+# **Features**
+
+## **Client Management (CRUD)**
 
 * Add new clients
 * Update client information
 * Delete clients
 * Search clients by Account Number
+* Display all clients
 
-### **Transactions**
+---
+
+## **Transactions**
 
 * Deposit money
 * Withdraw money
-* Display total balances of all clients
+* Transfer money between accounts
+* Display total balances
+* View transfer logs
 
-### **User Management**
+---
 
-* Add, update, delete, and search users
-* Assign permissions (Full Access / Limited Access)
+## **User Management**
+
+* Add new users
+* Update users
+* Delete users
+* Search users
+* Assign custom permissions
+* Full Access / Limited Access support
+
+---
+
+## **Authentication & Security**
+
 * Secure login system
-
-### **Command-Line Interface (CLI)**
-
-* User-friendly text-based menus
-* Organized navigation:
-
-  * **Main Menu**
-  * **Transactions Menu**
-  * **User Management Menu**
+* User authentication
+* Permission-based access control
+* Login history tracking
+* Password encryption
 
 ---
 
-## **Login Information**
+## **Currency Exchange**
 
-**Default Admin Credentials:**
-
-* **Username:** `admin`
-* **Password:** `1234`
-
-> Admin has full access to all functionalities: client management, transactions, and user management.
-
----
-
-## **Database Structure**
-
-**Clients.txt** – Stores client data:
-
-| Field           | Description       |
-| --------------- | ----------------- |
-| Account Number  | Unique identifier |
-| Pin Code        | Client PIN        |
-| Name            | Client name       |
-| Phone           | Contact number    |
-| Account Balance | Current balance   |
-
-**Users.txt** – Stores user data:
-
-| Field       | Description                   |
-| ----------- | ----------------------------- |
-| Username    | User login name               |
-| Password    | User password                 |
-| Permissions | Access level (Full / Limited) |
-
-> All records are separated using a custom delimiter: `#//#`.
+* List all currencies
+* Find currency by code
+* Find currency by country
+* Update exchange rates
+* Currency conversion calculator
 
 ---
 
-## **How It Works**
+## **Command-Line Interface (CLI)**
 
-1. The application loads data from `Clients.txt` and `Users.txt` into memory (vectors).
-2. Users perform operations on in-memory data.
-3. Changes are saved back to the text files immediately.
-4. Users navigate via structured CLI menus:
+* Main Menu
+* Transactions Menu
+* User Management Menu
+* Currency Exchange Menu
+* Login Register Screen
 
-**Main Menu**
+---
+
+# **Login Information**
+
+### Default Admin Account
+
+| Username | Password |
+| -------- | -------- |
+| Admin    | 1234     |
+
+> The administrator account has full access to all system functionalities.
+
+---
+
+# **Permission System**
+
+| Permission        | Value |
+| ----------------- | ----- |
+| List Clients      | 1     |
+| Add Client        | 2     |
+| Delete Client     | 4     |
+| Update Client     | 8     |
+| Find Client       | 16    |
+| Transactions      | 32    |
+| Login Register    | 64    |
+| Manage Users      | 128   |
+| Currency Exchange | 256   |
+| Full Access       | -1    |
+
+---
+
+# **Database Structure**
+
+### Clients.txt
+
+Stores client information.
+
+| Field           |
+| --------------- |
+| First Name      |
+| Last Name       |
+| Email           |
+| Phone           |
+| Account Number  |
+| Pin Code        |
+| Account Balance |
+
+---
+
+### Users.txt
+
+Stores user accounts and permissions.
+
+| Field       |
+| ----------- |
+| First Name  |
+| Last Name   |
+| Email       |
+| Phone       |
+| Username    |
+| Password    |
+| Permissions |
+
+---
+
+### LoginRegister.txt
+
+Stores login history.
+
+| Field       |
+| ----------- |
+| Date / Time |
+| Username    |
+| Password    |
+| Permissions |
+
+---
+
+### TransferLog.txt
+
+Stores transfer operations.
+
+| Field                     |
+| ------------------------- |
+| Date / Time               |
+| Source Account            |
+| Destination Account       |
+| Amount                    |
+| Source Balance After      |
+| Destination Balance After |
+| User                      |
+
+---
+
+### Currencies.txt
+
+Stores currency exchange rates.
+
+| Field         |
+| ------------- |
+| Country       |
+| Currency Code |
+| Currency Name |
+| Rate          |
+
+---
+
+> All records are stored using the custom delimiter:
+
+```cpp
+#//#
+```
+
+---
+
+# **How It Works**
+
+1. The application loads data from text files into memory.
+2. Users authenticate through the login system.
+3. Permissions are verified before opening protected screens.
+4. Users perform operations through structured menus.
+5. Changes are saved immediately back to the text files.
+6. Login operations and transfers are logged automatically.
+
+---
+
+## **Main Menu**
 
 * Show Client List
 * Add New Client
 * Delete Client
-* Update Client Info
+* Update Client
 * Find Client
 * Transactions
 * Manage Users
+* Login Register
+* Currency Exchange
 * Logout
 
-**Transactions Menu**
+---
+
+## **Transactions Menu**
 
 * Deposit
 * Withdraw
-* Show Total Balances
+* Total Balances
+* Transfer
+* Transfer Log
 * Back to Main Menu
 
-**User Management Menu**
+---
+
+## **User Management Menu**
 
 * List Users
-* Add New User
+* Add User
 * Delete User
 * Update User
 * Find User
@@ -119,35 +242,113 @@
 
 ---
 
-## **Project Structure**
+## **Currency Exchange Menu**
 
-```
-E-BankSimV0.1.cpp      → Main source code
-Clients.txt        → Client database
-Users.txt          → User database
-README.md          → Project documentation
+* List Currencies
+* Find Currency
+* Update Currency Rate
+* Currency Calculator
+* Back to Main Menu
+
+---
+
+# **Project Structure**
+
+```text
+E-BankSim.cpp
+
+├── Core Classes
+│   ├── Person.h
+│   ├── User.h
+│   ├── BankClient.h
+│   └── Currency.h
+│
+├── Screens
+│   ├── LoginScreen.h
+│   ├── MainScreen.h
+│   ├── TransactionsScreen.h
+│   ├── ManageUsersLib.h
+│   ├── CurrencyMainScreen.h
+│   └── Other Screen Classes
+│
+├── Utilities
+│   ├── StringLib.h
+│   ├── DateLib.h
+│   ├── InputValidation.h
+│   ├── UtilLib.h
+│   └── EncryptionLib.h
+│
+├── Data Files
+│   ├── Clients.txt
+│   ├── Users.txt
+│   ├── LoginRegister.txt
+│   ├── TransferLog.txt
+│   └── Currencies.txt
+│
+└── README.md
 ```
 
 ---
 
-## **Learning Goals**
+# **System Architecture**
 
-* Simulate a database using text files
-* Practice file handling in C++ with `fstream`
-* Implement CRUD operations in a CLI project
-* Understand data persistence without a real database
-* Learn basic user authentication and permissions handling
+```text
+Login System
+      │
+      ▼
+ Main Menu
+ ├── Client Management
+ ├── Transactions
+ ├── User Management
+ ├── Login Register
+ └── Currency Exchange
+```
 
 ---
 
-## **Changes from Previous Version**
+# **Learning Goals**
 
-| Aspect              | Previous Version                 | v0.1 Professional Version                        |
-| ------------------- | -------------------------------- | ------------------------------------------------ |
-| User Authentication | Not included                     | Added login system with username/password        |
-| User Management     | Not included                     | Full CRUD with permissions                       |
-| Database Files      | Only Clients.txt                 | Clients.txt + Users.txt                          |
-| Menu Structure      | Simple Main & Transactions menus | Main Menu + Transactions + User Management menus |
-| Security            | None                             | Permission-based access control                  |
-| CLI Experience      | Basic                            | Structured, user-friendly                        |
-| Documentation       | Minimal                          | Detailed, professional, includes tables & flow   |
+This project was created to practice and improve:
+
+* Object-Oriented Programming (OOP)
+* Inheritance
+* Encapsulation
+* Abstraction
+* Interfaces
+* File Handling
+* Data Persistence
+* Authentication Systems
+* Permission Systems
+* Banking System Simulation
+* Modular Software Design
+
+---
+
+# **Changes from Previous Version**
+
+| Feature                   | Previous Version       | v2.0                              |
+| ------------------------- | ---------------------- | --------------------------------- |
+| Programming Style         | Procedural Programming | Object-Oriented Programming (OOP) |
+| Client CRUD               | ✅                      | ✅                                 |
+| User Management           | ❌                      | ✅                                 |
+| Authentication System     | ❌                      | ✅                                 |
+| Permissions System        | ❌                      | ✅                                 |
+| Login Register            | ❌                      | ✅                                 |
+| Transfers                 | ❌                      | ✅                                 |
+| Transfer Logs             | ❌                      | ✅                                 |
+| Currency Exchange         | ❌                      | ✅                                 |
+| Currency Calculator       | ❌                      | ✅                                 |
+| Password Encryption       | ❌                      | ✅                                 |
+| Inheritance               | ❌                      | ✅                                 |
+| Interfaces                | ❌                      | ✅                                 |
+| Encapsulation             | ❌                      | ✅                                 |
+| Multi-Screen Architecture | ❌                      | ✅                                 |
+| Documentation             | Basic                  | Professional                      |
+
+---
+
+# **Author**
+
+**Youness Chergui Amin**
+
+C++ Banking Management System Project
