@@ -1,0 +1,85 @@
+﻿  OOPBank System.cpp
+E:\visual c++\OOPBank System\StringLib.h(38,25): warning C4267: 'return': conversion from 'size_t' to 'short', possible loss of data
+  (compiling source file 'OOPBank%20System.cpp')
+  
+E:\visual c++\OOPBank System\StringLib.h(43,29): warning C4267: 'return': conversion from 'size_t' to 'short', possible loss of data
+  (compiling source file 'OOPBank%20System.cpp')
+  
+E:\visual c++\OOPBank System\StringLib.h(55,30): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
+  (compiling source file 'OOPBank%20System.cpp')
+  
+E:\visual c++\OOPBank System\StringLib.h(189,29): warning C4267: 'return': conversion from 'size_t' to 'short', possible loss of data
+  (compiling source file 'OOPBank%20System.cpp')
+  
+E:\visual c++\OOPBank System\StringLib.h(319,30): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
+  (compiling source file 'OOPBank%20System.cpp')
+  
+E:\visual c++\OOPBank System\StringLib.h(365,22): warning C4267: 'initializing': conversion from 'size_t' to 'short', possible loss of data
+  (compiling source file 'OOPBank%20System.cpp')
+  
+E:\visual c++\OOPBank System\InputValidation.h(114,16): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'OOPBank%20System.cpp')
+  
+E:\visual c++\OOPBank System\InputValidation.h(118,26): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'OOPBank%20System.cpp')
+  
+E:\visual c++\OOPBank System\BankClient.h(187,12): warning C4240: nonstandard extension used: access to 'clsBankClient::stTrnsferLogRecord' now defined to be 'public', previously it was defined to be 'private'
+  (compiling source file 'OOPBank%20System.cpp')
+      E:\visual c++\OOPBank System\BankClient.h(165,12):
+      see declaration of 'clsBankClient::stTrnsferLogRecord'
+  
+E:\visual c++\OOPBank System\BankClient.h(175,39): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'OOPBank%20System.cpp')
+  
+E:\visual c++\OOPBank System\BankClient.h(176,48): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'OOPBank%20System.cpp')
+  
+E:\visual c++\OOPBank System\BankClient.h(177,49): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'OOPBank%20System.cpp')
+  
+E:\visual c++\OOPBank System\BankClient.h(402,28): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'OOPBank%20System.cpp')
+  
+E:\visual c++\OOPBank System\BankClient.h(411,24): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'OOPBank%20System.cpp')
+  
+E:\visual c++\OOPBank System\UtilLib.h(60,5): warning C4102: 'defualt': unreferenced label
+  (compiling source file 'OOPBank%20System.cpp')
+  
+E:\visual c++\OOPBank System\User.h(205,9): warning C4240: nonstandard extension used: access to 'clsUser::stLoginRegisterRecord' now defined to be 'public', previously it was defined to be 'private'
+  (compiling source file 'OOPBank%20System.cpp')
+      E:\visual c++\OOPBank System\User.h(23,9):
+      see declaration of 'clsUser::stLoginRegisterRecord'
+  
+E:\visual c++\OOPBank System\AddNewClientScreen.h(30,60): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'OOPBank%20System.cpp')
+  
+E:\visual c++\OOPBank System\UpdateClientScreen.h(33,60): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'OOPBank%20System.cpp')
+  
+E:\visual c++\OOPBank System\TotalBalanceScreen.h(72,71): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+  (compiling source file 'OOPBank%20System.cpp')
+  
+E:\visual c++\OOPBank System\TransferScreen.h(43,51): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'OOPBank%20System.cpp')
+  
+E:\visual c++\OOPBank System\TransferScreen.h(48,53): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'OOPBank%20System.cpp')
+  
+E:\visual c++\OOPBank System\AddNewUserScreen.h(71,11): warning C4129: 'D': unrecognized character escape sequence
+  (compiling source file 'OOPBank%20System.cpp')
+  
+E:\visual c++\OOPBank System\UpdateUserScreen.h(69,11): warning C4129: 'D': unrecognized character escape sequence
+  (compiling source file 'OOPBank%20System.cpp')
+  
+E:\visual c++\OOPBank System\Currency.h(26,17): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'OOPBank%20System.cpp')
+  
+E:\visual c++\OOPBank System\UpdateCurrencyRateScreen.h(17,52): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'OOPBank%20System.cpp')
+  
+E:\visual c++\OOPBank System\CurrencyCalculatorScreen.h(17,51): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'OOPBank%20System.cpp')
+  
+E:\visual c++\OOPBank System\User.h(371,1): warning C4715: 'clsUser::Save': not all control paths return a value
+  OOPBank System.vcxproj -> E:\visual c++\OOPBank System\x64\Debug\OOPBank System.exe
